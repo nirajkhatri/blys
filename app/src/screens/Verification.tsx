@@ -35,7 +35,7 @@ const Verification = ({navigation}: {navigation: any}) => {
     return unSubscribeNavigation;
   }, [navigation]);
 
-  const handleSubmitOtp = async () => {
+  const handleSubmitVerificationCode = async () => {
     if (verificationCode && verificationCode.length == 6)
       return mutate(verificationCode);
 
@@ -61,17 +61,19 @@ const Verification = ({navigation}: {navigation: any}) => {
 
     if (text == '') return setError('No data on clipboard');
     if (text.length != 6) return setError('Invalid data on clipboard');
-    let newOtp = '';
+    let newVerificationCode = '';
     for (let i = 0; i < text.length; i++) {
       if (!/^\d+$/.test(text[i])) {
-        newOtp = '';
+        newVerificationCode = '';
         break;
       }
-      newOtp += text[i];
+      newVerificationCode += text[i];
     }
-    if (newOtp.length != 6) return setError('Invalid data on clipboard');
 
-    setVerificationCode(newOtp);
+    if (newVerificationCode.length != 6)
+      return setError('Invalid data on clipboard');
+
+    setVerificationCode(newVerificationCode);
     setError('');
   };
 
@@ -125,14 +127,14 @@ const Verification = ({navigation}: {navigation: any}) => {
         <VerificationInput
           ref={inputRef}
           value={verificationCode}
-          onSubmitEditing={handleSubmitOtp}
+          onSubmitEditing={handleSubmitVerificationCode}
           onChangeText={text => {
             setError('');
             setVerificationCode(text);
           }}
           onBlur={handleBlur}
         />
-        <Button onPress={handleSubmitOtp} btnText={'Submit'} />
+        <Button onPress={handleSubmitVerificationCode} btnText={'Submit'} />
       </Pressable>
     </KeyboardAvoidingView>
   );
